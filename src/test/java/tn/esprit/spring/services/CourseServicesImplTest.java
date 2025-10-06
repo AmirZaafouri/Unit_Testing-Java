@@ -90,7 +90,7 @@ class CourseServicesImplTest {
             // Then
             assertNull(course);
 
-            // Verify that repository.save() was called once
+            // Verify that repository.findById() was called once
             verify(courseRepository, times(1)).findById(anyLong());
         }
     }
