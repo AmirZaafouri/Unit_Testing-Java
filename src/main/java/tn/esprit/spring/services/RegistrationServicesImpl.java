@@ -8,6 +8,7 @@ import tn.esprit.spring.repositories.ICourseRepository;
 import tn.esprit.spring.repositories.IRegistrationRepository;
 import tn.esprit.spring.repositories.ISkierRepository;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Period;
@@ -31,7 +32,7 @@ public class RegistrationServicesImpl implements  IRegistrationServices{
 
     @Override
     public Registration assignRegistrationToCourse(Long numRegistration, Long numCourse) {
-        Registration registration = registrationRepository.findById(numRegistration).orElse(null);
+        Registration registration = registrationRepository.findById(numRegistration).orElseThrow(()-> new EntityNotFoundException("No Regestiration was Found "+ numRegistration));
         Course course = courseRepository.findById(numCourse).orElse(null);
         registration.setCourse(course);
         return registrationRepository.save(registration);
@@ -90,7 +91,6 @@ public class RegistrationServicesImpl implements  IRegistrationServices{
                 log.info("Sorry, your age doesn't allow you to register for this course ! \n Try to Register to a Collective Child Course...");
         }
         return registration;
-
     }
     private Registration assignRegistration (Registration registration, Skier skier, Course course){
         registration.setSkier(skier);
